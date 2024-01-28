@@ -1,6 +1,6 @@
 {
 	"geode": "v2.0.0",
-	"version": "v1.0.0",
+	"version": "v1.1.1",
 	"id": "sanes.daily-transfer",
 	"name": "Daily Transfer",
 	"developer": "SaneS",
@@ -28,6 +28,13 @@
             "description": "Move the daily chest button to the center of the menu",
             "type": "bool",
             "default": false
+        },
+        "gap": {
+            "name": "Gap Size",
+            "type": "float",
+            "default": 5.0,
+            "min": 0,
+            "max": 40
         },
         "isMeow": {
             "name": "Meow",

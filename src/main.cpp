@@ -68,6 +68,7 @@ class $modify(Menu, MenuLayer) {
 		auto isOn = Mod::get()->getSettingValue<bool>("isOn");
 		auto isMeow = Mod::get()->getSettingValue<bool>("isMeow");
 		auto fullHouse = Mod::get()->getSettingValue<bool>("fullHouse");
+		float gap = Mod::get()->getSettingValue<double>("gap");
 
 		auto childs = menuR->getChildren();
 
@@ -90,7 +91,7 @@ class $modify(Menu, MenuLayer) {
 				menuR->setContentSize({2*rx,ry});
 				menuC->setAnchorPoint(menuR->getAnchorPoint());
 				menuR->setAnchorPoint({0.5,1.0});
-				menuR->setLayout(RowLayout::create());
+				menuR->setLayout(RowLayout::create()->setGap(gap));
 
 				//Vertical C
 				menuC->alignItemsVertically();
@@ -109,7 +110,7 @@ class $modify(Menu, MenuLayer) {
 				menuC->addChild(dB);
 				//Horizontal C
 				menuC->alignItemsHorizontally();
-				menuC->setLayout(RowLayout::create());
+				menuC->setLayout(RowLayout::create()->setGap(gap));
 				menuC->updateLayout();
 			}
 		} 
