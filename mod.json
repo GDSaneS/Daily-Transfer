@@ -10,7 +10,7 @@
     },
 	"resources": {
         "sprites": [
-            "resources/lelo.png"
+            "resources/*.png"
         ],
 		"files": [
             "resources/s3532.ogg"
