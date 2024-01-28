@@ -30,8 +30,16 @@ class $modify(Menu, MenuLayer) {
 		// Get win size
 		auto winSize = CCDirector::get()->getWinSize();
 
+		float i = winSize.width/10;
+		float j = winSize.height/10;
+
 		// Get right side menu
 		auto menuR = this->getChildByID("right-side-menu");
+		auto sizeR = menuR->getContentSize();
+		float rx = sizeR.height;
+		float ry = sizeR.width;
+		auto sizeR2 = {rx, ry};
+
 
 		// Get daily Button
 		auto dB = menuR->getChildByID("daily-chest-button");
@@ -47,48 +55,75 @@ class $modify(Menu, MenuLayer) {
 
 		// Create a "center menu"
 		auto menuC = CCMenu::create(nullptr);
+		menuC->setID("center-menu");
 
 		// Center menu position
 		menuC->setPosition(0,0);
 
 		// Get old chest position
 		auto chestPos = dB->getPosition();
-		
-		/* Create an empty node disguised as the daily button
 
-		(I really wish I knew how to stop incompatibilities
-		without creating a fake invisible daily button)
-		*/
-		auto node = CCNode::create();
-		node->setID("daily-chest-button");
 
 		// Get both settings
 		auto isOn = Mod::get()->getSettingValue<bool>("isOn");
 		auto isMeow = Mod::get()->getSettingValue<bool>("isMeow");
+		auto fullHouse = Mod::get()->getSettingValue<bool>("fullHouse");
 
+		auto childs = menuR->getChildren();
+
+
+		
 		// Setting shenanigans (ik i'm new to modding)
 		if (isOn == true) {
-			menuR->removeChildByID("daily-chest-button");
-			menuC->removeChildByID("daily-chest-button");
-			node->setPosition(chestPos);
-			menuR->addChild(node);
-			dB->setPosition(winSize.width/2, winSize.height/3*0.85);
-			menuC->addChild(dB);
-			btn->setPosition(winSize.width/2*1.2, winSize.height/3*0.85);
-		} else {
-			menuC->removeChildByID("daily-chest-button");
-			menuR->removeChildByID("daily-chest-button");
-			dB->setPosition(chestPos);
-			menuR->addChild(dB);
-			node->setPosition(winSize.width/2, winSize.height/3*0.85);
-			menuC->addChild(node);
-			btn->setPosition(winSize.width/2, winSize.height/3*0.85);
-		}
+
+			menuC->setPosition(5*i, 4.5*j);
+			menuC->setContentSize({2*rx,ry});
+			menuC->setAnchorPoint({0.5,1.5});
+			menuC->setLayout(RowLayout::create());
+
+			if (fullHouse == true) {
+				
+
+				menuC->setPosition(menuR->getPosition());
+				menuR->setPosition(5*i, 4.5*j);
+				menuC->setContentSize(menuR->getContentSize());
+				menuR->setContentSize({2*rx,ry});
+				menuC->setAnchorPoint(menuR->getAnchorPoint());
+				menuR->setAnchorPoint({0.5,1.0});
+				menuR->setLayout(RowLayout::create());
+
+				//Vertical C
+				menuC->alignItemsVertically();
+				menuC->setLayout(ColumnLayout::create());
+				menuC->updateLayout();
+				
+			} else {
+
+				auto node = CCNode::create();
+				node->setID("placeholder");
+				node->setPosition(chestPos);
+				menuR->addChild(node);
+
+
+				menuR->removeChildByID("daily-chest-button");
+				menuC->addChild(dB);
+				//Horizontal C
+				menuC->alignItemsHorizontally();
+				menuC->setLayout(RowLayout::create());
+				menuC->updateLayout();
+			}
+		} 
 
 		if (isMeow == true) {
-			menuC->addChild(btn);
+			if (fullHouse == true) {
+				menuR->addChild(btn);
+			} else {
+				menuC->addChild(btn);
+				menuC->setLayout(RowLayout::create());
+			}
 		} else {
 			menuC->removeChildByID("meow");
+			menuR->removeChildByID("meow");
 		}
 
 		// The menu birth (I spent 1 hour wondering why my custom ccmenu didnt appear, guess what)
