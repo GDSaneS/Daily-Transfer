@@ -35,6 +35,7 @@ class $modify(Menu, MenuLayer) {
 
 		// Get right side menu
 		auto menuR = this->getChildByID("right-side-menu");
+		
 		auto sizeR = menuR->getContentSize();
 		float rx = sizeR.height;
 		float ry = sizeR.width;
@@ -72,46 +73,47 @@ class $modify(Menu, MenuLayer) {
 
 		auto childs = menuR->getChildren();
 
-
+		auto lay = menuR->getLayout();
+		auto horiz = RowLayout::create()->setGap(gap);
 		
 		// Setting shenanigans (ik i'm new to modding)
 		if (isOn == true) {
 
-			menuC->setPosition(5*i, 4.5*j);
+		
+			
+			auto posY = this->getChildByID("main-menu")->getPositionY() - this->getChildByIDRecursive("play-button")->getPositionY();
+			
+			menuC->setPosition(0.5*winSize.width, posY);
 			menuC->setContentSize({2*rx,ry});
-			menuC->setAnchorPoint({0.5,1.5});
-			menuC->setLayout(RowLayout::create());
+			menuC->setAnchorPoint({0.5,0.9});
+			menuC->setLayout(horiz);
 
 			if (fullHouse == true) {
 				
-
-				menuC->setPosition(menuR->getPosition());
-				menuR->setPosition(5*i, 4.5*j);
-				menuC->setContentSize(menuR->getContentSize());
+				if (Loader::get()->isModLoaded("abb2k.backup")){
+					posY = posY + 23.75f;
+				}
+				//menuC->setPosition(menuR->getPosition());
+				menuR->setPosition(0.5*winSize.width, posY);
+				//menuC->setContentSize(menuR->getContentSize());
 				menuR->setContentSize({2*rx,ry});
-				menuC->setAnchorPoint(menuR->getAnchorPoint());
-				menuR->setAnchorPoint({0.5,1.0});
-				menuR->setLayout(RowLayout::create()->setGap(gap));
+				//menuC->setAnchorPoint(menuR->getAnchorPoint());
+				menuR->setAnchorPoint({0.5,0.9});
+				//menuR->setLayout(RowLayout::create()
+				//	->setGap(gap)
+				//);
+				menuR->setLayout(menuC->getLayout());
+				menuC->setLayout(lay);
 
 				//Vertical C
-				menuC->alignItemsVertically();
+				/*menuC->alignItemsVertically();
 				menuC->setLayout(ColumnLayout::create());
-				menuC->updateLayout();
+				menuC->updateLayout();*/
 				
 			} else {
 
-				auto node = CCNode::create();
-				node->setID("placeholder");
-				node->setPosition(chestPos);
-				menuR->addChild(node);
-
-
 				menuR->removeChildByID("daily-chest-button");
 				menuC->addChild(dB);
-				//Horizontal C
-				menuC->alignItemsHorizontally();
-				menuC->setLayout(RowLayout::create()->setGap(gap));
-				menuC->updateLayout();
 			}
 		} 
 
@@ -121,6 +123,7 @@ class $modify(Menu, MenuLayer) {
 			} else {
 				menuC->addChild(btn);
 				menuC->setLayout(RowLayout::create());
+				menuC->updateLayout();
 			}
 		} else {
 			menuC->removeChildByID("meow");
@@ -129,6 +132,7 @@ class $modify(Menu, MenuLayer) {
 
 		// The menu birth (I spent 1 hour wondering why my custom ccmenu didnt appear, guess what)
 		this->addChild(menuC);
+		menuC->setLayout(horiz);
 
         return true;
 	}
