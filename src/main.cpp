@@ -2,104 +2,89 @@
  * Include the Geode headers.
  */
 #include <Geode/Geode.hpp>
+
 /**
- * Required to modify the MenuLayer class
- */
-#include <Geode/modify/MenuLayer.hpp>
-/**
- * Brings cocos2d and all Geode namespaces 
- * to the current scope.
+ * Brings cocos2d and all Geode namespaces to the current scope.
  */
 using namespace geode::prelude;
 
 /**
- * `$modify` lets you extend and modify GD's 
- * classes; to hook a function in Geode, 
- * simply $modify the class and write a new 
- * function definition with the signature of 
- * the one you want to hook.
+ * `$modify` lets you extend and modify GD's classes.
+ * To hook a function in Geode, simply $modify the class
+ * and write a new function definition with the signature of
+ * the function you want to hook.
+ *
+ * Here we use the overloaded `$modify` macro to set our own class name,
+ * so that we can use it for button callbacks.
+ *
+ * Notice the header being included, you *must* include the header for
+ * the class you are modifying, or you will get a compile error.
+ *
+ * Another way you could do this is like this:
+ *
+ * struct MyMenuLayer : Modify<MyMenuLayer, MenuLayer> {};
  */
-class $modify(Menu, MenuLayer) {
+#include <Geode/modify/MenuLayer.hpp>
+class $modify(MyMenuLayer, MenuLayer) {
+	/**
+	 * Typically classes in GD are initialized using the `init` function, (though not always!),
+	 * so here we use it to add our own button to the bottom menu.
+	 *
+	 * Note that for all hooks, your signature has to *match exactly*,
+	 * `void init()` would not place a hook!
+	*/
+	bool init() {
+		/**
+		 * We call the original init function so that the
+		 * original class is properly initialized.
+		 */
+		if (!MenuLayer::init()) {
+			return false;
+		}
 
-	bool init(){
-		if (!MenuLayer::init())
-            return false;
+		if (Mod::get()->getSettingValue<bool>("isOn")==false){
+			return true;
+		}
 
-		// Our code!
+		auto onlyDaily = Mod::get()->getSettingValue<bool>("onlyDaily");
 
-		// Get win size
+		auto menu = this->getChildByID("bottom-menu");
+		auto menuR = this->getChildByID("right-side-menu");
 		auto winSize = CCDirector::get()->getWinSize();
 
-		// Get right side menu
-		auto menuR = this->getChildByID("right-side-menu");
+		float x = winSize.width/2;
+		float y = menu->getPositionY()+menu->getContentHeight()*0.9;
 
-		// Get daily Button
-		auto dB = menuR->getChildByID("daily-chest-button");
+		auto dailyB = menuR->getChildByID("daily-chest-button");
 
-		// Cat texture
-		auto lelo = CCSprite::create("lelo.png"_spr);
+		if (onlyDaily == true){
+			auto menuC = CCMenu::create(nullptr);
+			this->addChild(menuC);
+			menuC->setID("center-menu");
+			menuC->setLayout(menu->getLayout());
 
-		// Cat button
-    	auto btn = CCMenuItemSpriteExtra::create(
-        	lelo, this, menu_selector(Menu::onCat)
-    	);
-		btn->setID("meow");
+			menuC->setPosition(0,0);
+			menuC->setContentWidth(menu->getContentWidth());
 
-		// Create a "center menu"
-		auto menuC = CCMenu::create(nullptr);
-
-		// Center menu position
-		menuC->setPosition(0,0);
-
-		// Get old chest position
-		auto chestPos = dB->getPosition();
-		
-		/* Create an empty node disguised as the daily button
-
-		(I really wish I knew how to stop incompatibilities
-		without creating a fake invisible daily button)
-		*/
-		auto node = CCNode::create();
-		node->setID("daily-chest-button");
-
-		// Get both settings
-		auto isOn = Mod::get()->getSettingValue<bool>("isOn");
-		auto isMeow = Mod::get()->getSettingValue<bool>("isMeow");
-
-		// Setting shenanigans (ik i'm new to modding)
-		if (isOn == true) {
+			
 			menuR->removeChildByID("daily-chest-button");
-			menuC->removeChildByID("daily-chest-button");
-			node->setPosition(chestPos);
-			menuR->addChild(node);
-			dB->setPosition(winSize.width/2, winSize.height/3*0.85);
-			menuC->addChild(dB);
-			btn->setPosition(winSize.width/2*1.2, winSize.height/3*0.85);
+			menuC->addChild(dailyB);
+
+			menuC->setPosition(x,y);
+
+			menuC->updateLayout();
+
 		} else {
-			menuC->removeChildByID("daily-chest-button");
-			menuR->removeChildByID("daily-chest-button");
-			dB->setPosition(chestPos);
-			menuR->addChild(dB);
-			node->setPosition(winSize.width/2, winSize.height/3*0.85);
-			menuC->addChild(node);
-			btn->setPosition(winSize.width/2, winSize.height/3*0.85);
+			menuR->setLayout(menu->getLayout());
+
+			menuR->setPosition(x,y);
+			menuR->setContentWidth(menu->getContentWidth());
+
+			menuR->updateLayout();
 		}
 
-		if (isMeow == true) {
-			menuC->addChild(btn);
-		} else {
-			menuC->removeChildByID("meow");
-		}
+		menu->updateLayout();
 
-		// The menu birth (I spent 1 hour wondering why my custom ccmenu didnt appear, guess what)
-		this->addChild(menuC);
-
-        return true;
-	}
-
-	// The cat job
-	void onCat(CCObject*) {
-		// El pepe ete sech
-		FMODAudioEngine::sharedEngine()->playEffect("s3532.ogg"_spr, 1, 1, 1);
+		return true;
 	}
 };

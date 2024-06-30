@@ -1,31 +1,26 @@
 {
-	"geode": "2.0.0-beta.9",
-	"version": "v1.0.0",
+	"geode": "3.1.1",
+	"gd": {
+		"win": "2.206",
+		"android": "2.206",
+		"mac": "2.206",
+		"ios": "2.206"
+	},
 	"id": "sanes.daily-transfer",
 	"name": "Daily Transfer",
+	"version": "v2.0.0",
 	"developer": "SaneS",
-	"description": "Moves the daily chest button below the Play button",
-    "gd": {
-        "win": "2.204"
-    },
-	"resources": {
-        "sprites": [
-            "resources/lelo.png"
-        ],
-		"files": [
-            "resources/s3532.ogg"
-        ]
-    },
+	"description": "Move the daily button to the center of the screen",
     "settings": {
         "isOn": {
             "name": "Enable the mod",
-            "description": "Move the daily chest button to the center of the menu",
+            "description": "Move the daily button to the center of the screen",
             "type": "bool",
             "default": true
         },
-        "isMeow": {
-            "name": "Meow",
-            "description": "Purrr",
+        "onlyDaily": {
+            "name": "Only move the Daily Button",
+            "description": "Keep the rest of buttons untouched (e.g. Texture Loader icon)",
             "type": "bool",
             "default": false
         }

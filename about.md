@@ -1,21 +1,18 @@
 # Daily Transfer
 
-Have you ever tried to click those pesky icons, and ended up opening the Rewards Tab?
+Move the Daily button to the center of the screen!
 
-Now you can place the Daily chest below the Play button!
+# Features (v1.1.0)
 
-# Features
+- The Daily button is moved right below the Play button, **it can be disabled**.
+![Mod enabled](sanes.daily-transfer/0.png)
 
-- The Daily button is moved right below the Play button, it can be disabled.
-Yeah that's it.
+- Transfer Full Column: every button on the right gets moved below the Play button! (Useful with other mods that add buttons to the right)
+![Full Column enabled](sanes.daily-transfer/1.png)
 
-Tested it on many aspect ratios and it doesn't cause any overlapping.
+Requests for more silly changes appreciated.
+You can tag me (@sanesgd) on the [Geode SDK](https://discord.com/invite/9e43WMKzhp) discord server.
 
-Requests for more silly changes appreciated c:
+# Compatibility
 
-# Compatible with
-
-- `BetterInfo` (no conflicts)
-- `GDTweaks` (for the most part)
-- `Better Menu` (no conflicts)
-- `Backup`, `Texture Loader` and other mods that add buttons to the side
+I haven't checked after Geode v3.0.0 so report any bugs or crashes, please.
