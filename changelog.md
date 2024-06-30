@@ -1,5 +1,11 @@
 # Daily Transfer - Changelog
 
+## v2.0.0
+
+ * Ported to Geode v3.1.1
+ * Fixed bugs
+
+
 ## v1.2.0
 
  * Android support

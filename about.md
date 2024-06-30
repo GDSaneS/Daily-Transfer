@@ -5,9 +5,11 @@ Move the Daily button to the center of the screen!
 # Features (v1.1.0)
 
 - The Daily button is moved right below the Play button, **it can be disabled**.
+
 ![Mod enabled](sanes.daily-transfer/0.png)
 
 - Transfer Full Column: every button on the right gets moved below the Play button! (Useful with other mods that add buttons to the right)
+
 ![Full Column enabled](sanes.daily-transfer/1.png)
 
 Requests for more silly changes appreciated.
